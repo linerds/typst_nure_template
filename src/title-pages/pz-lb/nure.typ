@@ -20,9 +20,9 @@
       #if authors.len() == 1 {
         let a = authors.first()
         [#gender-form("author", dict: a):\ ]
-        [ст. гр. #a.edu-program\-#a.group\ ]
+        if ("edu-program" in a) and ("group" in a) [ст. гр. #a.edu-program\-#a.group\ ]
         [#a.name\ ]
-        if not is-empty(a.variant) [Варіант: №#a.variant]
+        if ("variant" in a) and (not is-empty(a.variant)) [Варіант: №#a.variant]
       } else if authors.len() > 1 [
         #gender-form("author"):\
         #for a in authors [
