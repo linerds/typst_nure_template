@@ -34,7 +34,10 @@ This template keeps the legacy coursework template intact while offering the new
 ## Usage
 
 ### As a local typst package
-1. Clone this repository into ~/.local/share/typst/packages/:
+You can install the template as a local Typst package. Choose the instructions for your platform below.
+
+#### Unix (Linux / macOS)
+1. Clone this repository into your local Typst packages folder:
 ```bash
 git clone -b 0.1.1 https://gitea.linerds.us/pencelheimer/typst_nure_template.git ~/.local/share/typst/packages/local/nure/0.1.1
 ```
@@ -42,6 +45,51 @@ git clone -b 0.1.1 https://gitea.linerds.us/pencelheimer/typst_nure_template.git
 ```bash
 typst init @local/nure:0.1.1 project-name
 ```
+
+#### Windows (symlink method)
+This method creates a symbolic link between the cloned repository and Typst's local packages folder in `%APPDATA%`. The benefit: when the template is updated on GitHub you only need to `git pull` in the cloned folder — VS Code (and Typst) will use the updated files automatically.
+
+Step 1 — clone the template (for example, into your Documents folder):
+```powershell
+cd $HOME\Documents
+git clone https://github.com/linerds/typst_nure_template.git
+```
+
+Step 2 — create the symlink (PowerShell must be run as Administrator):
+1. Open Start, find PowerShell, right-click and choose "Run as Administrator".
+2. Run the following commands as a single block:
+```powershell
+# Create local packages folder (if it doesn't exist)
+New-Item -ItemType Directory -Force -Path "$env:APPDATA\typst\packages\local\nure"
+
+# Point to the folder you cloned
+$gitFolder = "$HOME\Documents\typst_nure_template"
+
+# Create a symbolic link for the package version (match the version in this repo)
+New-Item -ItemType SymbolicLink -Path "$env:APPDATA\typst\packages\local\nure\0.1.1" -Target $gitFolder
+```
+
+Step 3 — use in VS Code
+Open your project folder (for example, your coursework or lab folder) in VS Code with the Tinymist Typst extension installed. Create `main.typ` and import the package using the official `@local` import:
+
+```typst
+#import "@local/nure:0.1.1": nure-report, style
+// If you need specific style variables from the package:
+#import "@local/nure:0.1.1/src/style.typ": spacing
+
+#show: nure-report.with(
+  title: "Report for Lab Work",
+  type: "Lab Work #1",
+  discipline: "Object-Oriented Programming",
+  author: "Surname I.I.",
+  supervisor: "Assoc. Prof. Kuznetsov O.V.",
+)
+
+= Work progress
+Your content...
+```
+
+The Windows steps above are intentionally minimal and focused on the symlink workflow. If you prefer not to use symlinks, you can copy `src/` to your project root and import `lib.typ` directly (see the "As a standalone file" section).
 
 ### As a standalone file
 Copy `src/` to your project's root directory, optionally renaming `src/` to `lib/` (then import `src/lib.typ` or `lib/lib.typ` accordingly).
