@@ -83,7 +83,7 @@
   calendar-plan,
   abstract,
   bib-count,
-  faculty: "комп’ютерних наук",
+  faculty: "комп'ютерних наук",
   education-level: "перший (бакалаврський)",
   program-type: "освітньо-професійна",
   program-name: none,
@@ -160,7 +160,7 @@
         #executor-label\
         здобувач #underline([#author.course]) курсу, групи #underline(group-name)\
         #uline(align: center, author-display-name)
-        #note[(Власне ім’я, ПРІЗВИЩЕ)]
+        #note[(Власне ім'я, ПРІЗВИЩЕ)]
 
         #v(0.2em)
         #inline-label-line([Спеціальність], [#edu-prog.code -- #edu-prog.name-long])
@@ -171,12 +171,12 @@
 
         #v(0.3em)
         #inline-label-line([Керівник], [#mentor-degree #mentor-display-name])
-        #note[(посада, Власне ім’я, ПРІЗВИЩЕ)]
+        #note[(посада, Власне ім'я, ПРІЗВИЩЕ)]
 
         #v(0.3em)
         #pad(left: 75pt)[
           #set par(first-line-indent: 0pt)
-          Члени комісії (#text(size: 10pt)[Власне ім’я, ПРІЗВИЩЕ, підпис])
+          Члени комісії (#text(size: 10pt)[Власне ім'я, ПРІЗВИЩЕ, підпис])
           #v(0.55em)
           #line(length: 100%, stroke: 0.5pt)
           #v(0.55em)
@@ -232,7 +232,7 @@
 
     #v(1.0em)
 
-    #label-line([здобувачеві], author-full-name-dat, caption: [(прізвище, ім’я, по батькові)], label-width: 95pt)
+    #label-line([здобувачеві], author-full-name-dat, caption: [(прізвище, ім'я, по батькові)], label-width: 95pt)
 
     #v(1.0em)
 
@@ -276,7 +276,7 @@
     #v(1.4em)
 
     Керівник роботи #uline(align: center, []) #h(1cm) #underline[#mentor-degree #mentor-display-name]
-    #note[(підпис) #h(4.5cm) (посада, Власне ім’я, ПРІЗВИЩЕ)]
+    #note[(підпис) #h(4.5cm) (посада, Власне ім'я, ПРІЗВИЩЕ)]
 
     #pagebreak()
   ]
