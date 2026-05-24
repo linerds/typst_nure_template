@@ -131,7 +131,10 @@
     #note([(повна назва)])
 
     #v(0.8em)
-    #inline-label-line([Кафедра], edu-prog.department-gen)
+    #inline-label-line(
+      [Кафедра],
+      lower(edu-prog.department-gen),
+    )
     #note([(повна назва)])
 
     #v(1.8em)
@@ -204,7 +207,7 @@
           faculty,
         ),
       ),
-      ([Кафедра], edu-prog.department-gen),
+      ([Кафедра], lower(edu-prog.department-gen)),
       ([Рівень вищої освіти], education-level),
       ([Спеціальність], [#edu-prog.code -- #edu-prog.name-long]),
       ([Тип програми], program-type),
