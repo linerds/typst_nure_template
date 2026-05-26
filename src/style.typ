@@ -186,6 +186,7 @@
     counter(figure.where(kind: raw)).update(0)
     counter(figure.where(kind: image)).update(0)
     counter(figure.where(kind: table)).update(0)
+    dstu-table-counter.update(0)
     it
   }
   set figure(numbering: i => context numbering("1.1", counter(heading).get().at(0), i))
@@ -217,6 +218,15 @@
     pad(it, left: indent-size)
     v(double-half-spacing, weak: true)
   }
+
+  // blocks `like this` aren't welcome, so ` is replaced with "
+  show raw.where(block: false): it => text(
+    lang: "uk",
+    size: 14pt,
+    hyphenate: false,
+    weight: "regular",
+    font: ("Times New Roman", "Liberation Serif"),
+  )["#it.text"]
 
   it
 }

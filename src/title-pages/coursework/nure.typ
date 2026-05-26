@@ -210,7 +210,8 @@
     #context [
       #let pages = counter(page).final().at(0)
       #let images = query(figure.where(kind: image)).len()
-      #let tables = query(figure.where(kind: table)).len()
+      #let dstu-tables = query(metadata).filter(it => type(it.value) == str and it.value.starts-with("start-dstu-table-")).len()
+      #let tables = query(figure.where(kind: table)).len() + dstu-tables
       #let bibs = bib-count.final().dedup().len()
       /* TODO: why this stopped working?
       #let tables = counter(figure.where(kind: table)).final().at(0)

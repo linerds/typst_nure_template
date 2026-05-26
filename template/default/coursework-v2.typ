@@ -20,6 +20,12 @@
   (name: "Сокорчук І. П.", display-name: "Ігор СОКОРЧУК", degree: "ст.викл. кафедри ПІ"),
 )
 
+#let committee_members = (
+  (name: "Груздо І.В.", degree: "Доц."),
+  (name: "Зибіна К.В.", degree: "Ст. викл."),
+  (name: "Гребенюк В.О.", degree: "Ст. викл."),
+)
+
 #let task-list = (
   done-date: datetime(year: 2026, month: 12, day: 27),
   initial-date: datetime(year: 2026, month: 9, day: 15),
@@ -53,11 +59,11 @@
 
 #let abstract = (
   keywords: (
-    "веб-застосунок",
-    "інформаційна система",
-    "курсова робота",
-    "програмна інженерія",
-    "тестовий приклад",
+    ("веб-застосунок", "WEB APPLICATION"),
+    ("інформаційна система", "INFORMATION SYSTEM"),
+    ("курсова робота", "COURSEWORK"),
+    ("програмна інженерія", "SOFTWARE ENGINEERING"),
+    ("тестовий приклад", "DEMO SAMPLE"),
   ),
   text: [
     Мета даної роботи -- продемонструвати оформлення пояснювальної записки
@@ -74,15 +80,7 @@
     шаблону без прив'язки до реального студента, викладача або завершеної роботи.
   ],
 )
-
 #let abstract_en = (
-  keywords: (
-    "WEB APPLICATION",
-    "INFORMATION SYSTEM",
-    "COURSEWORK",
-    "SOFTWARE ENGINEERING",
-    "DEMO SAMPLE",
-  ),
   text: [
     The purpose of this work is to demonstrate the formatting of a coursework
     explanatory note using the new template variant.
@@ -122,6 +120,7 @@
   ),
   authors: authors,
   mentors: mentors,
+  committee-members: committee_members,
   task-list: task-list,
   calendar-plan: calendar-plan,
   abstract: abstract,

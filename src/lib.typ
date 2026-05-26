@@ -65,6 +65,7 @@
 /// - title (str): Work title
 /// - authors (array): List of author dictionaries
 /// - mentors (array): List of mentor dictionaries
+/// - committee-members (array): Optional list of commission member dictionaries for the title page
 /// - task-list (dict): Task metadata
 /// - calendar-plan (dict): Calendar plan table
 /// - abstract (dict): Keywords and abstract text
@@ -77,6 +78,7 @@
   title: none,
   authors: (),
   mentors: (),
+  committee-members: none,
   task-list: (),
   calendar-plan: (),
   abstract: (),
@@ -107,12 +109,14 @@
   } else {
     abstract
   }
+  let committee_members = committee-members
 
   tp.cw-v2.nure(
     university,
     title,
     authors,
     mentors,
+    committee_members,
     task-list,
     calendar-plan,
     abstract,
@@ -125,10 +129,12 @@
 
   doc
 
+
+
   {
     show regex("^\\d+\\."): it => [#it#h(0.5cm)]
     show block: it => [#it.body#parbreak()]
-    bibliography(bib-path, title: [Перелік джерел посилання], style: "csl/dstu-3008-2015.csl", full: true)
+    bibliography(bib-path, title: [Перелік джерел посилання], style: "csl/dstu-8302-2015.csl", full: true)
   }
 
   style.appendices(appendices)

@@ -1,7 +1,7 @@
 #import "../../shared.typ": universities
 #import "../../helpers.typ": *
 #import "../../style.typ": spacing
-#import "../../utils.typ": bold, uline, filled-lines
+#import "../../utils.typ": bold, uline, filled-lines, hfill
 
 #let note(content) = block(width: 100%, above: 5pt, below: 0pt)[
   #set text(size: 10pt)
@@ -69,9 +69,29 @@
 #let task-num(n) = box(str(n) + ".")
 
 #let title-field(value) = {
-  uline(align: center, filled-lines(value))
+  uline(align: center, value.join())
   uline(align: center, [])
   note[(тема)]
+}
+
+#let commission-lines(members) = {
+  if members.len() > 0 {
+    for (i, member) in members.enumerate() {
+      if i > 0 {
+        linebreak()
+      }
+      let member-display-name = member.at("display-name", default: member.name)
+      let member-degree = member.at("degree", default: "")
+      uline(align: left, [#member-degree #member-display-name])
+    }
+  } else {
+    v(0.55em)
+    line(length: 100%, stroke: 0.5pt)
+    v(0.55em)
+    line(length: 100%, stroke: 0.5pt)
+    v(0.55em)
+    line(length: 100%, stroke: 0.5pt)
+  }
 }
 
 #let nure(
@@ -79,6 +99,7 @@
   title,
   authors,
   mentors,
+  committee_members,
   task-list,
   calendar-plan,
   abstract,
@@ -90,6 +111,11 @@
 ) = {
   let author = authors.first()
   let head-mentor = mentors.first()
+  let commission-members = if committee_members == none {
+    mentors.slice(1)
+  } else {
+    committee_members
+  }
 
   let uni = universities.at(university)
   let edu-prog = uni.edu-programs.at(author.edu-program)
@@ -177,12 +203,8 @@
         #pad(left: 75pt)[
           #set par(first-line-indent: 0pt)
           Члени комісії (#text(size: 10pt)[Власне ім'я, ПРІЗВИЩЕ, підпис])
-          #v(0.55em)
-          #line(length: 100%, stroke: 0.5pt)
-          #v(0.55em)
-          #line(length: 100%, stroke: 0.5pt)
-          #v(0.55em)
-          #line(length: 100%, stroke: 0.5pt)
+          #v(0.15em)
+          #commission-lines(commission-members)
         ]
       ],
     )
@@ -266,12 +288,12 @@
 
     #v(5.0em)
 
-    Дата видачі завдання “#underline(task-list.initial-date.display("[day]"))” #underline(month-gen(task-list.initial-date.month())) #task-list.initial-date.display("[year]")р.
+    Дата видачі завдання “#underline(task-list.initial-date.display("[day]"))” #underline(month-gen(task-list.initial-date.month())) #task-list.initial-date.display("[year]") р.
 
     #v(1.4em)
 
-    Здобувач #uline(align: center, [])
-    #note[(підпис)]
+    Здобувач #underline([#hfill(6cm)])
+    #note[(підпис) #h(8cm)]
 
     #v(1.4em)
 
@@ -292,7 +314,8 @@
     #context [
       #let pages = counter(page).final().at(0)
       #let images = query(figure.where(kind: image)).len()
-      #let tables = query(figure.where(kind: table)).len()
+      #let dstu-tables = query(metadata).filter(it => type(it.value) == str and it.value.starts-with("start-dstu-table-")).len()
+      #let tables = query(figure.where(kind: table)).len() + dstu-tables
       #let bibs = bib-count.final().dedup().len()
 
       #let counters = ()
@@ -306,23 +329,33 @@
 
     \
 
-    #(
-      abstract
-        .keywords
-        .map(upper)
-        .sorted(by: (a, b) => {
-          if is-cyr(a) != is-cyr(b) { is-cyr(a) } else { a < b }
-        })
-        .join(", ")
-    )
+    #let keyword-pairs = if abstract.keywords.len() > 0 and type(abstract.keywords.first()) == array {
+      abstract.keywords.map(pair => (
+        uk: pair.at(0),
+        en: pair.at(1),
+      ))
+    } else if abstract.at("en", default: none) != none and abstract.en.at("keywords", default: none) != none {
+      abstract.keywords.enumerate().map(((i, uk)) => (
+        uk: uk,
+        en: abstract.en.keywords.at(i),
+      ))
+    } else {
+      abstract.keywords.map(uk => (uk: uk))
+    }
+    #let sorted-keyword-pairs = keyword-pairs.sorted(by: (a, b) => {
+      if is-cyr(a.uk) != is-cyr(b.uk) { is-cyr(a.uk) } else { a.uk < b.uk }
+    })
+
+    #(sorted-keyword-pairs.map(pair => upper(pair.uk)).join(", "))
 
     \
 
     #abstract.text
 
-    #if abstract.at("en", default: none) != none [
+    #if abstract.at("en", default: none) != none or (keyword-pairs.len() > 0 and keyword-pairs.first().at("en", default: none) != none) [
       \
-      #(abstract.en.keywords.map(upper).join(", "))
+
+      #(sorted-keyword-pairs.map(pair => upper(pair.en)).join(", "))
 
       \
 
@@ -340,7 +373,7 @@
         } else {
           block(width: 100%)[
             #link(el.location())[
-              ДОДАТОК #it.prefix()#h(0.5em)#it.inner()
+              Додаток #it.prefix()#h(0.5em)#it.inner()
             ]
           ]
         }
