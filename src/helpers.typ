@@ -14,7 +14,7 @@
   "грудня",
 ).at(month - 1)
 
-#let is-cyr(c) = regex("[\p{Cyrillic}]") in c
+#let is-cyr(c) = regex("^\p{Cyrillic}") in c
 
 /// type-safe emptiness check
 #let is-empty(val) = {
