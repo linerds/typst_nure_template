@@ -19,7 +19,7 @@ work_output_file = "{{config_root}}/main.pdf"
 
 nure_package_repo = "https://gitea.linerds.us/pencelheimer/typst_nure_template.git"
 nure_package_ref  = "0.1.1"
-nure_package_rev = "f60fefc7b6f4df5b6fcb835bfc9742dc92dd9abf"
+nure_package_rev = "d6037872ddb6391afec147a679fa05f08cba6bb0"
 
 nure_package_name = "vendor/nure"
 nure_package_ver  = "{{vars.nure_package_ref}}"
