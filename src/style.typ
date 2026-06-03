@@ -49,6 +49,7 @@
   caption: none,
   columns: none,
   header: none,
+  tag: none,
   ..args,
 ) = {
   let caption = _required("caption", caption)
@@ -63,7 +64,6 @@
 
   let named = args.named()
   let body = args.pos()
-
   context {
     let h = counter(heading).get()
     let section = if h.len() > 0 { h.at(0) } else { 0 }
@@ -84,6 +84,8 @@
 
     {
       set block(spacing: dstu-table-caption-gap)
+
+      [#metadata((kind: "dstu-table", number: num)) #if tag != none { label(tag) }]
 
       block(sticky: true)[
         #dstu-table-label[Таблиця #num -- #caption]
@@ -169,6 +171,16 @@
   set list(indent: indent-size + 0.1cm, body-indent: 0.5cm, marker: [--])
 
   // Figures
+  show ref: it => {
+    let el = it.element
+
+    if el != none and el.func() == metadata and type(el.value) == dictionary and el.value.at("kind", default: none) == "dstu-table" {
+      link(el.location())[#el.value.at("number")]
+    } else {
+      it
+    }
+  }
+
   show figure: it => {
     v(double-spacing, weak: true)
     it
