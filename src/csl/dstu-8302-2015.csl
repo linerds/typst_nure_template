@@ -69,7 +69,7 @@
   </macro>
 
   <macro name="container">
-    <text variable="container-title" font-style="italic"/>
+    <text variable="container-title"/>
   </macro>
 
   <macro name="site-or-publisher">
@@ -359,7 +359,7 @@
               <text macro="title"/>
               <group delimiter=" ">
                 <text value="In:"/>
-                <text variable="container-title" font-style="italic"/>
+                <text variable="container-title"/>
               </group>
               <group delimiter=", ">
                 <text macro="publisher-place"/>
