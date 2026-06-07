@@ -158,7 +158,10 @@
 
   // Text and paragraph
   set text(lang: "uk", size: 14pt, hyphenate: false, font: ("Times New Roman", "Liberation Serif"))
-  set par(justify: true, spacing: spacing, leading: spacing, first-line-indent: (amount: indent-size, all: true))
+  set par(justify: true, spacing: spacing, leading: spacing, first-line-indent: (
+    amount: indent-size,
+    all: true,
+  ))
   set block(spacing: spacing)
   set underline(evade: false)
 
@@ -172,13 +175,60 @@
 
   // Figures
   show ref: it => {
-    let el = it.element
+    let target = it.element
 
-    if el != none and el.func() == metadata and type(el.value) == dictionary and el.value.at("kind", default: none) == "dstu-table" {
-      link(el.location())[#el.value.at("number")]
-    } else {
-      it
+    if target == none {
+      return it
     }
+
+    // dstu-table refs carry a number already resolved at the table location.
+    if (
+      target.func() == metadata
+        and type(target.value) == dictionary
+        and target.value.at("kind", default: none) == "dstu-table"
+    ) {
+      return link(target.location())[#target.value.at("number")]
+    }
+
+    if target.func() != figure and target.func() != math.equation {
+      return it
+    }
+
+    // A figure or equation number must be read at the element itself, not at the citation site.
+    // The default ref display re-runs the numbering function here, where its inner `counter(heading)`
+    // context resolves to the citing chapter and prints the wrong section or appendix letter.
+    // We sample every counter at the target location instead.
+    let loc = target.location()
+
+    let appendix = dstu-table-appendix.at(loc)
+
+    let section = if appendix == none {
+      str(counter(heading).at(loc).first())
+    } else {
+      upper(ukr-enum.at(appendix - 1))
+    }
+
+    let number = if target.func() == figure {
+      let idx = counter(figure.where(kind: target.kind)).at(loc).first()
+      section + "." + str(idx)
+    } else {
+      let idx = counter(math.equation).at(loc).first()
+      "(" + section + "." + str(idx) + ")"
+    }
+
+    let supplement = if it.supplement == auto {
+      target.supplement
+    } else {
+      it.supplement
+    }
+
+    let body = if supplement != auto and supplement != none {
+      [#supplement #number]
+    } else {
+      [#number]
+    }
+
+    link(loc, body)
   }
 
   show figure: it => {
